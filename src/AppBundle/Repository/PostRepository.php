@@ -10,4 +10,14 @@ namespace AppBundle\Repository;
  */
 class PostRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function searchMatchingPosts($searchText)
+    {
+    	return $this->createQueryBuilder('p')
+               ->where('p.title LIKE :input OR p.body LIKE :input')
+               ->setParameter('input', '%' .$searchText.'%')
+               ->setMaxResults(10)
+               ->getQuery()
+               ->getResult();
+    }
+
 }

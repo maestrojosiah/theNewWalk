@@ -45,5 +45,42 @@ class AjaxController extends Controller
 
     }
 
+    /**
+     * @Route("/get_matches", name="get_matches")
+     */
+    public function getMatchesAction(Request $request)
+    {
+            $data = [];
+            $value = $request->request->get('thisValue');
+
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $data['user'] = $user;
+            $em = $this->getDoctrine()->getManager();
+          
+            $posts = $this->getDoctrine()
+              ->getRepository('AppBundle:Post')
+              ->searchMatchingPosts($value);
+
+            $pstArray = [];
+            $linkArray = [];
+            $str = [];
+
+            if($posts){
+
+              foreach($posts as $post){
+              	$pstArray[] = $post->getId();
+                $linkArray[] = $this->generateUrl('show_post', array('id' => $post->getId() ));                
+                $str[] = substr($post->getBody(), strpos($post->getBody(), $value), 50);
+              }
+              
+              $combined = array_combine($linkArray,  $str);
+              $data['combined'] = $combined;
+            }
+
+            return new JsonResponse($data);
+    }
+
+
+
 
 }

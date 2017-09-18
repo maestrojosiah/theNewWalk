@@ -57,8 +57,19 @@
 
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-      <div class="container">
-        <a class="navbar-brand" href="index.html">The New Walk</a>
+      <div class="container" style="position: relative;">
+        <a class="navbar-brand" href="{{ path('homepage') }}">The New Walk</a>
+        <form class="navbar-form" role="search">
+        <div class="input-group">
+            <input type="text" id="searchItem" class="form-input form-control" placeholder="Search" name="q">
+            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+        </div>
+        </form>
+        <div class="panel panel-default" id="searchResults" style="position: absolute; left: 20px; top: 70px;">
+            <span id='close' style="display:none; cursor: pointer;"><i class="fa fa-times"></i></span>
+              <div id="listGroup" class="list-group">
+              </div>
+        </div>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           Menu
           <i class="fa fa-bars"></i>
@@ -221,6 +232,34 @@
         });
       });
     </script>    
+    <script>
+      $( "#searchItem" ).keyup(function( event ) {
+        var value = $(this).val();
+        if($("#searchItem").val().length >= 3) {
+          $.ajax({
+              url:'{{ (path('get_matches')) }}',
+              type: "POST",
+              dataType: "json",
+              data: {
+                  "thisValue": value,
+              },
+              async: true,
+              success: function (data)
+              {
+                 console.log(data);
+                 $( "#listGroup" ).empty();
+                $.each(data.combined, function( key, value ) {
+                  
+                    $("#listGroup").append('<a href="'+key+'" class="list-group-item list-group-item-action">...'+value+'...</a>');
+                  
+                });
+                
+              }
+          });
+        }
+
+      });
+    </script>
 
     <script>
     $(document).on('click', '[id^="addComment_"]', function(){ 
