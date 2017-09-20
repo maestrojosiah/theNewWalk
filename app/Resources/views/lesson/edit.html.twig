@@ -1,0 +1,31 @@
+{% extends 'base_lesson.html.twig' %}
+    {% block header %}
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('{{ asset('img/lesson-bg.jpg') }}')">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-heading">
+              <h1>{{ lesson.title }}</h1>
+              <h2 class="subheading">__________________________</h2>
+               <br /><br />
+              {% if app.user %}
+                <a href="{{ path('show_lesson', {'id': lesson.id} ) }}" class="btn btn-outline btn-primary btn-lg" >Back to lesson</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    {% endblock %}
+
+{% block content %}
+    {{ include('templates/editLessonModal.html.twig') }}       
+{% endblock %}
+{% block javascripts %}
+  <script>
+      $(document).ready(function() {
+          $('#editModal').modal('show');
+      });
+  </script>
+{% endblock %}

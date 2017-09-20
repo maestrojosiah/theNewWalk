@@ -29,6 +29,10 @@
 
     <!-- styles for cropper -->    
     <link  href="{{ asset('cropper/dist/cropper.css') }}" rel="stylesheet">
+    
+    <!-- styles for featherlight -->    
+    <link  href="{{ asset('featherlight/release/featherlight.min.css') }}" rel="stylesheet">
+    <link  href="{{ asset('featherlight/release/featherlight.gallery.min.css') }}" rel="stylesheet">
 
   </head>
 
@@ -61,7 +65,7 @@
         <a class="navbar-brand" href="{{ path('homepage') }}">The New Walk</a>
         <form class="navbar-form" role="search">
         <div class="input-group">
-            <input type="text" id="searchItem" class="form-input form-control" placeholder="Search" name="q">
+            <input type="text" id="searchItem" class="form-input form-control" placeholder="Search Posts" name="q">
             <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
         </div>
         </form>
@@ -80,16 +84,16 @@
               <a class="nav-link" href="{{ path('homepage') }}">Blog</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="about.html">Articles</a>
+              <a class="nav-link" href="{{ path('article_homepage') }}">Articles</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="post.html">Discussions</a>
+              <a class="nav-link" href="{{ path('discussion_homepage') }}">Discussions</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="contact.html">Lesson</a>
+              <a class="nav-link" href="{{ path('lesson_homepage') }}">Lesson</a>
             </li>
             {{ mgilet_notification_render({ 'display': 'dropdown', 'seen': false}) }}            <li class="nav-item dropdown show">
-                 <a class="dropdown-toggle nav-link" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="{{ path(link) }}">{{ user.firstName }}</a>
+                 <a class="dropdown-toggle nav-link" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="{{ path(link) }}">{{ app.user.firstName }}</a>
                 {% if app.user %}
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <a class="dropdown-item" href="{{ path('user_profile', {'slug': app.user.randomAuth } ) }}">My account</a>
@@ -194,20 +198,28 @@
     <script src="{{ asset('waypoints/lib/jquery.waypoints.min.js') }}"></script>
     <script src="{{ asset('waypoints/lib/shortcuts/infinite.min.js') }}"></script>
     <script src="{{ asset('jquery.ns-autogrow/dist/jquery.ns-autogrow.min.js') }}"></script>
+    
+    <!-- featherlight script -->
+    <script src="{{ asset('featherlight/release/featherlight.min.js') }}"></script>
+    <script src="{{ asset('featherlight/release/featherlight.gallery.min.js') }}"></script>
+
+
     <script type="text/javascript">
-      // $('#image').cropper({
-      //   aspectRatio: 9 / 9,
-      //   crop: function(e) {
-      //     // Output the result data for cropping image.
-      //     console.log(e.x);
-      //     console.log(e.y);
-      //     console.log(e.width);
-      //     console.log(e.height);
-      //     console.log(e.rotate);
-      //     console.log(e.scaleX);
-      //     console.log(e.scaleY);
-      //   }
-      // });
+      $('#image').cropper({
+        aspectRatio: 9 / 9,
+        crop: function(e) {
+          // Output the result data for cropping image.
+          console.log(e.x);
+          console.log(e.y);
+          console.log(e.width);
+          console.log(e.height);
+          console.log(e.rotate);
+          console.log(e.scaleX);
+          console.log(e.scaleY);
+        }
+      });
+
+
     </script>
 
     <script type="text/javascript">
@@ -237,7 +249,7 @@
         var value = $(this).val();
         if($("#searchItem").val().length >= 3) {
           $.ajax({
-              url:'{{ (path('get_matches')) }}',
+              url:'{{ (path('get_matches', {'entity':'post'})) }}',
               type: "POST",
               dataType: "json",
               data: {
@@ -250,7 +262,7 @@
                  $( "#listGroup" ).empty();
                 $.each(data.combined, function( key, value ) {
                   
-                    $("#listGroup").append('<a href="'+key+'" class="list-group-item list-group-item-action">...'+value+'...</a>');
+                    $("#listGroup").append('<a href="'+key+'" class="list-group-item list-group-item-action">'+value+'...</a>');
                   
                 });
                 
@@ -289,6 +301,34 @@
 
       });
     </script>
+    <script>
+    $(document).on('click', '[id^="addPhotoComment_"]', function(){ 
+      //when you click on "comment" button to repond to a post
+      var nameId = jQuery(this).attr("id");
+      var arrStr = nameId.split("_");
+      var id = arrStr[1];
+  
+      var comment = $("#comment").val();
+
+      $.ajax({
+            url:'{{ (path('photo_create_comment')) }}',
+            type: "POST",
+            dataType: "json",
+            data: {
+                "comment": comment,
+                "id": id,
+            },
+            async: true,
+            success: function (data)
+            {
+              console.log(data.comment);
+              $("#commentHolder").append(data.comment);
+              $("#comment").val("");
+            }
+        });
+
+      });
+    </script>
 {% if app.user %}
     <script>
     $(document).on('click', '[id^="makeProfile_"]', function(){ 
@@ -296,8 +336,19 @@
       var nameId = jQuery(this).attr("id");
       var arrStr = nameId.split("_");
       var id = arrStr[1];
-  
-      $.ajax({
+      
+      $("#image").cropper('getCroppedCanvas').toBlob(function (blob) {
+      var formData = new FormData();
+
+      formData.append('croppedImage', blob);
+      
+      $.ajax('{{ path('ajax_upload') }}', {
+        method: "POST",
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+          $.ajax({
             url:'{{ (path('make_profile_picture')) }}',
             type: "POST",
             dataType: "json",
@@ -307,9 +358,16 @@
             async: true,
             success: function (data)
             {
-                location.href = "{{ path('user_profile', {'slug': user.randomAuth}) }}";
+                location.href = "{{ path('user_profile', {'slug': app.user.randomAuth}) }}";
             }
-        });
+          });
+        },
+        error: function () {
+          console.log('Upload error');
+        }
+      });
+
+    });
 
       });
     </script>
@@ -325,6 +383,38 @@
 
       $.ajax({
             url:'{{ (path('edit_comment')) }}',
+            type: "POST",
+            dataType: "json",
+            data: {
+                "comment": comment,
+                "id": id,
+            },
+            async: true,
+            success: function (data)
+            {
+              console.log(data.comment);
+              $("#commentBody_"+id).val(data.comment);
+              $("#commentBody_"+id).attr('contenteditable', 'false');        
+              $("#commentBody_"+id).css("background-color", "white"); 
+              $("#updateComment_"+id).hide();     
+
+            }
+        });
+
+      });
+    </script>
+
+    <script>
+    $(document).on('click', '[id^="updatePhotoComment_"]', function(){ 
+      //when you click on "commentEdit" button to edit a comment
+      var nameId = jQuery(this).attr("id");
+      var arrStr = nameId.split("_");
+      var id = arrStr[1];
+  
+      var comment = $("#commentBody_"+id).text();
+
+      $.ajax({
+            url:'{{ (path('photo_edit_comment')) }}',
             type: "POST",
             dataType: "json",
             data: {
@@ -418,6 +508,20 @@
         $("#commentBody_"+id).css("background-color", "#F4F9B4"); 
         $("#commentBody_"+id).focus(); 
         $("#updateComment_"+id).show();     
+      });
+    </script>
+
+    <script>
+    // make photo comment paragraph editable
+    $(document).on('click', '[id^="editPhotoComment_"]', function(){ 
+        var nameId = jQuery(this).attr("id");
+        var arrStr = nameId.split("_");
+        var id = arrStr[1]; 
+        console.log(id);
+        $("#commentBody_"+id).attr('contenteditable', 'true');        
+        $("#commentBody_"+id).css("background-color", "#F4F9B4"); 
+        $("#commentBody_"+id).focus(); 
+        $("#updatePhotoComment_"+id).show();     
       });
     </script>
 

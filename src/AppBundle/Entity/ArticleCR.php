@@ -27,7 +27,7 @@ class ArticleCR
     private $body;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="articleCRs")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="author", referencedColumnName="id")
      */
 

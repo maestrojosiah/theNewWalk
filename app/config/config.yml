@@ -8,6 +8,7 @@ imports:
 parameters:
     locale: en
     photo_directory: '%kernel.project_dir%/web/photos/profile'
+    photo_directory2: '%kernel.project_dir%/web/photos/profile/picture'
 
 framework:
     #esi: ~

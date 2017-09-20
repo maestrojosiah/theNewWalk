@@ -23,7 +23,7 @@
                 </h3>
               </a>
               <p class="post-meta">Posted by
-                <a href="#"> {{ post.user.FirstName|capitalize }}</a>
+                <a href="{{ path('user_profile', {'slug': post.user.randomAuth} ) }}"> {{ post.user.FirstName|capitalize }}</a>
                 on {{ post.created|date('F j o') }}
                 {% if app.user and app.user.firstName == post.user.firstName %} | <a href="#" data-toggle="modal" data-target="#deleteModal{{ post.id }}">Delete</a> | <a href="{{ path('edit_post', {'id': post.id } ) }}" id="{{ post.id }}">Edit</a></p>{% endif %}
             </div>

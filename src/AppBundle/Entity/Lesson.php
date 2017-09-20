@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Lesson
@@ -20,9 +21,9 @@ class Lesson
     private $title;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="lesson_date", type="datetime", nullable=false)
+     * @var \Date
+     * @Assert\Date()
+     * @ORM\Column(name="lesson_date", type="date", nullable=false)
      */
     private $lessonDate;
 

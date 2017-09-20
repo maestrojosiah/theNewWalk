@@ -21,7 +21,7 @@ class ArticleC
     private $created;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="articleCs")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="author", referencedColumnName="id")
      */
 
@@ -51,7 +51,7 @@ class ArticleC
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="ArticleC", mappedBy="article")
+     * @ORM\OneToMany(targetEntity="ArticleCR", mappedBy="comment")
      */
     private $replies;
 

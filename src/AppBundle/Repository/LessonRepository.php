@@ -10,4 +10,22 @@ namespace AppBundle\Repository;
  */
 class LessonRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function findThisWeeksLesson($week_start, $week_end){
+    	return $this->createQueryBuilder('l')
+           ->where('l.lessonDate >= :week_start AND l.lessonDate <= :week_end')
+           ->setParameter('week_start', $week_start)
+           ->setParameter('week_end', $week_end)
+           ->getQuery()
+           ->getResult();
+	}
+	
+    public function searchMatchingPosts($searchText)
+    {
+    	return $this->createQueryBuilder('p')
+               ->where('p.title LIKE :input OR p.body LIKE :input')
+               ->setParameter('input', '%' .$searchText.'%')
+               ->setMaxResults(10)
+               ->getQuery()
+               ->getResult();
+    }
 }

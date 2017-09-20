@@ -22,33 +22,129 @@ class AjaxController extends Controller
             $data = [];
             $id = $request->request->get('id');
             $user = $this->get('security.token_storage')->getToken()->getUser();
+      
+        $em = $this->getDoctrine()->getManager();
+
+      $post = $em->getRepository('AppBundle:Post')
+        ->find($id);
+
+      $post->setUser($user);
+      
+        if (!$post) {
+            throw $this->createNotFoundException(
+                'No post found for that title'
+            );
+        }
+
+      $data['title'] = $post->getTitle();
+      $data['body'] = $post->getBody();
+      $data['id'] = $id;
+      $data['post'] = $post;
+            return new JsonResponse($data);
+        }
+
+    }
+
+    /**
+     * @Route("/article/edit/get", name="get_article_for_edit")
+     */
+    public function getArticleAction(Request $request)
+    {
+        if($request->request->get('id')){
+            $data = [];
+            $id = $request->request->get('id');
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+      
+        $em = $this->getDoctrine()->getManager();
+
+      $article = $em->getRepository('AppBundle:Article')
+        ->find($id);
+
+      $article->setUser($user);
+      
+        if (!$article) {
+            throw $this->createNotFoundException(
+                'No article found for that title'
+            );
+        }
+
+      $data['title'] = $article->getTitle();
+      $data['body'] = $article->getBody();
+      $data['id'] = $id;
+      $data['article'] = $article;
+            return new JsonResponse($data);
+        }
+
+    }
+
+    /**
+     * @Route("/discussion/edit/get", name="get_discussion_for_edit")
+     */
+    public function getDiscussionAction(Request $request)
+    {
+        if($request->request->get('id')){
+            $data = [];
+            $id = $request->request->get('id');
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+      
+        $em = $this->getDoctrine()->getManager();
+
+      $discussion = $em->getRepository('AppBundle:Discussion')
+        ->find($id);
+
+      $discussion->setUser($user);
+      
+        if (!$discussion) {
+            throw $this->createNotFoundException(
+                'No discussion found for that title'
+            );
+        }
+
+      $data['title'] = $discussion->getTitle();
+      $data['body'] = $discussion->getBody();
+      $data['id'] = $id;
+      $data['discussion'] = $discussion;
+            return new JsonResponse($data);
+        }
+
+    }
+
+    /**
+     * @Route("/lesson/edit/get", name="get_lesson_for_edit")
+     */
+    public function getLessonAction(Request $request)
+    {
+        if($request->request->get('id')){
+            $data = [];
+            $id = $request->request->get('id');
+            $user = $this->get('security.token_storage')->getToken()->getUser();
     	
 	    	$em = $this->getDoctrine()->getManager();
 
-			$post = $em->getRepository('AppBundle:Post')
+			$lesson = $em->getRepository('AppBundle:Lesson')
 				->find($id);
 
-			$post->setUser($user);
+			$lesson->setUser($user);
 			
-		    if (!$post) {
+		    if (!$lesson) {
 		        throw $this->createNotFoundException(
-		            'No post found for that title'
+		            'No lesson found for that title'
 		        );
 		    }
 
-			$data['title'] = $post->getTitle();
-			$data['body'] = $post->getBody();
+			$data['title'] = $lesson->getTitle();
+			$data['body'] = $lesson->getBody();
 			$data['id'] = $id;
-			$data['post'] = $post;
+			$data['lesson'] = $lesson;
             return new JsonResponse($data);
        	}
 
     }
 
     /**
-     * @Route("/get_matches", name="get_matches")
+     * @Route("/get_matches/{entity}", name="get_matches")
      */
-    public function getMatchesAction(Request $request)
+    public function getMatchesAction(Request $request, $entity)
     {
             $data = [];
             $value = $request->request->get('thisValue');
@@ -56,21 +152,20 @@ class AjaxController extends Controller
             $user = $this->get('security.token_storage')->getToken()->getUser();
             $data['user'] = $user;
             $em = $this->getDoctrine()->getManager();
-          
+            
+            $Entity = ucfirst($entity);
             $posts = $this->getDoctrine()
-              ->getRepository('AppBundle:Post')
+              ->getRepository("AppBundle:$Entity")
               ->searchMatchingPosts($value);
 
-            $pstArray = [];
             $linkArray = [];
             $str = [];
 
             if($posts){
 
               foreach($posts as $post){
-              	$pstArray[] = $post->getId();
-                $linkArray[] = $this->generateUrl('show_post', array('id' => $post->getId() ));                
-                $str[] = substr($post->getBody(), strpos($post->getBody(), $value), 50);
+                $linkArray[] = $this->generateUrl("show_$entity", array('id' => $post->getId() ));                
+                $str[] = "<b>".$post->getTitle()."</b><br />...".substr($post->getBody(), strpos($post->getBody(), $value), 50);
               }
               
               $combined = array_combine($linkArray,  $str);

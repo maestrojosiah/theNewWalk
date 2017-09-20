@@ -1,0 +1,64 @@
+{% extends 'base_lesson.html.twig' %}
+    {% block header %}
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('{{ asset('img/lesson-bg.jpg') }}')">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+            <div class="post-heading">
+              <h1>{{ lesson.title }}</h1>
+              <h2 class="subheading">__________________________</h2>
+              <span class="meta">
+                {% if app.user and app.user.isAdmin == true %}
+                  <a href="#" data-toggle="modal" data-target="#deleteModal{{ lesson.id }}">
+                    Delete
+                  </a>
+                  | <a href="{{ path('edit_lesson', {'id': lesson.id } ) }}" id="{{ lesson.id }}">
+                    Edit
+                  </a>
+                {% endif %}
+              </span>
+               <br /><br />
+              {% if app.user and user.isAdmin == true %}
+                <button type="button" class="btn btn-outline btn-primary btn-lg" data-toggle="modal" data-target="#createModal">Create lesson</button>
+              {% endif %}
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+      <!-- Modal -->
+    <div class="modal fade" id="deleteModal{{ lesson.id }}" role="dialog">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Delete?</h4>
+          </div>
+          <div class="modal-body">
+            <p>Are you sure you want to delete "{{ lesson.title }}"?.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <a class="btn btn-danger" href="{{ path('delete_lesson', {'id': lesson.id } ) }}">Go ahead</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% endblock %}
+
+{% block content %}
+    <!-- lesson Content -->
+    <article>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-md-10 mx-auto">
+
+            {{ lesson.body|raw }}
+          </div>
+        </div>
+      </div>
+    </article>
+{% endblock %}

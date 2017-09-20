@@ -27,7 +27,14 @@ class UserController extends Controller
             ->findBy(
                 array('user' => $user),
                 array('id'=>'DESC'),
-                10
+                5
+            );
+
+        $posts = $em->getRepository('AppBundle:Post')
+            ->findBy(
+                array('user' => $user),
+                array('id'=>'DESC'),
+                5
             );
 
         $profilePhoto = $em->getRepository('AppBundle:Photo')
@@ -43,6 +50,9 @@ class UserController extends Controller
         }
         if($profilePhoto){
             $data['profilePhoto'] = $profilePhoto[0];
+        }
+        if($posts){
+            $data['posts'] = $posts;
         }
         
 

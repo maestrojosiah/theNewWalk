@@ -121,11 +121,6 @@ class User implements UserNotificationInterface, AdvancedUserInterface, \Seriali
     private $photos;
 
     /**
-     * @ORM\OneToMany(targetEntity="PhotoC", mappedBy="user")
-     */
-    private $photoCs;
-
-    /**
      * @ORM\OneToMany(targetEntity="Discussion", mappedBy="user")
      */
     private $discussions;
@@ -153,7 +148,6 @@ class User implements UserNotificationInterface, AdvancedUserInterface, \Seriali
         $this->groups = new ArrayCollection();
         $this->commentRs = new ArrayCollection();
         $this->photos = new ArrayCollection();
-        $this->photoCs = new ArrayCollection();
         $this->discussions = new ArrayCollection();
         $this->articlesM = new ArrayCollection();
         $this->articles = new ArrayCollection();

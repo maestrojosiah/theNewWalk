@@ -27,7 +27,7 @@
             <div class="commentBox">
                <div class="panel panel-default">
                   <div class="panel-heading">
-                      <strong>{{ comment.user.firstName }}</strong> <span class="text-muted">commented on {{ comment.created | date('F jS, Y') }}</span>
+                      <strong><a href="{{ path('user_profile', {'slug': comment.user.randomAuth} ) }}">{{ comment.user.firstName }}</a></strong> <span class="text-muted">commented on {{ comment.created | date('F jS, Y') }}</span>
                         {% if app.user and app.user.firstName == comment.user.firstName or app.user.firstName == comment.user.firstName %}
                          | <a href="#" class="text-muted sm-text" data-toggle="modal" data-target="#deleteCommentModal{{ comment.id }}">
                             Delete
@@ -57,8 +57,8 @@
                         <div class="commentText">
                             <p id="replyBody_{{reply.id}}" class="">{{ reply.body }}</p> 
                             <button type="button" style="display:none;" id="updateReply_{{reply.id}}" class="btn btn-default">Done</button>
-                            <span class="date sub-text">
-                              {{ reply.user.firstName }} on {{ reply.created | date('F jS, Y') }}
+                            <span class="date sub-text"><a href="{{ path('user_profile', {'slug': reply.user.randomAuth} ) }}">
+                              {{ reply.user.firstName }} </a> on {{ reply.created | date('F jS, Y') }}
                                 {% if app.user and app.user.firstName == post.user.firstName or app.user.firstName == reply.user.firstName %}
                                 | <a style="cursor: pointer;" class="text-muted" id="deleteReply_{{ reply.id }}">
                                   Delete

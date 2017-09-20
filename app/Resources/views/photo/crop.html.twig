@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+{% block header %}
+<!-- Page Header -->
+<header class="masthead" style=" height:100px; background-image: url('{{ asset('img/dot-bg.jpg') }}')">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+      </div>
+    </div>
+  </div>
+</header>
+{% endblock %}
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 col-md-10 mx-auto">
+		<img id="image" src="{{ asset('photos/profile/'~img) }}" />
+      	<button class="btn btn-primary btn-block" id="makeProfile_{{id}}" >Set as profile picture</button>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+
+{% block javascripts %}
+  <script>
+    $(document).ready(function() {
+
+	});
+  </script>
+{% endblock %}

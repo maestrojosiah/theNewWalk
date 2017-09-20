@@ -1,5 +1,15 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto);
 
+.featherlight .legend {
+    position: absolute;
+    bottom: 0;
+    font-size: larger;
+    color: white;
+    background-color: rgba(129,254,188,0.5);
+    width: 100%;
+    text-align: center!important;
+}
+
 /****** LOGIN MODAL ******/
 .loginmodal-container {
   padding: 30px;
@@ -226,4 +236,20 @@ img {
    position:relative;
    top: -5px;
    left: -5px;
+}
+
+#cropContainerPreload {
+      width: 150px;
+      height: 150px;
+      position:relative; /* or fixed or absolute */
+}
+
+
+.card-columns {
+  @include media-breakpoint-only(lg) {
+    column-count: 3;
+  }
+  @include media-breakpoint-only(xl) {
+    column-count: 4;
+  }
 }

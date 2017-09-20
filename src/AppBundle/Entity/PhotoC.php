@@ -36,7 +36,7 @@ class PhotoC
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="photoCs")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="author", referencedColumnName="id")
      */
     private $user;

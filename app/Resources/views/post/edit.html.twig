@@ -9,12 +9,12 @@
               <h1>{{ post.title }}</h1>
               <h2 class="subheading">__________________________</h2>
               <span class="meta">Posted by
-                <a href="#"> {{ post.user.FirstName|capitalize }}</a>
+                <a href="{{ path('user_profile', {'slug': post.user.randomAuth} ) }}"> {{ post.user.FirstName|capitalize }}</a>
                 on {{ post.created|date('F j o') }}
               </span>
                <br /><br />
               {% if app.user %}
-                <button type="button" class="btn btn-outline btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Create Post</button>
+                <a href="{{ path('show_post', {'id': post.id} ) }}" class="btn btn-outline btn-primary btn-lg" >Back to post</a>
               {% endif %}
 
             </div>

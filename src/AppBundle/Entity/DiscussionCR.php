@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class DiscussionCR
 {
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="discussionCRs")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="author", referencedColumnName="id")
      */
 

@@ -9,7 +9,7 @@
               <h1>{{ post.title }}</h1>
               <h2 class="subheading">__________________________</h2>
               <span class="meta">Posted by
-                <a href="#"> {{ post.user.FirstName|capitalize }}</a>
+                <a href="{{ path('user_profile', {'slug': post.user.randomAuth} ) }}"> {{ post.user.FirstName|capitalize }}</a>
                 on {{ post.created|date('F j o') }}
                 {% if app.user and app.user.firstName == post.user.firstName %}
                  | <a href="#" data-toggle="modal" data-target="#deleteModal{{ post.id }}">
@@ -82,7 +82,7 @@
             <div class="commentBox">
                <div id="comment{{comment.id}}" class="panel panel-default">
                   <div class="panel-heading">
-                      <strong>{{ comment.user.firstName }}</strong> <span class="text-muted">commented on {{ comment.created | date('F jS, Y') }}</span>
+                      <strong><a href="{{ path('user_profile', {'slug': comment.user.randomAuth} ) }}">{{ comment.user.firstName }}</a></strong> <span class="text-muted">commented on {{ comment.created | date('F jS, Y') }}</span>
                       {% if app.user %}
                         {% if app.user and app.user.firstName == post.user.firstName or app.user.firstName == comment.user.firstName %}
                          | <a href="#" class="text-muted sm-text" data-toggle="modal" data-target="#deleteCommentModal{{ comment.id }}">
@@ -117,7 +117,7 @@
                   {% set link_to_profile_picture = "photos/default_" ~ reply.user.gender ~ ".png" %}
                   {% for photo in reply.user.photos %}
                     {% if photo.profile == true %}
-                      {% set link_to_profile_picture = "photos/profile/" ~ photo.filename %}
+                      {% set link_to_profile_picture = "photos/profile/picture/" ~ reply.user.randomAuth ~ '.png' %}
                     {% endif %}
                   {% endfor %}
                     <li id="reply{{reply.id}}">
@@ -127,8 +127,8 @@
                         <div class="commentText">
                             <p id="replyBody_{{reply.id}}" class="">{{ reply.body }}</p> 
                             <button type="button" style="display:none;" id="updateReply_{{reply.id}}" class="btn btn-default">Done</button>
-                            <span class="date sub-text">
-                              {{ reply.user.firstName }} on {{ reply.created | date('F jS, Y') }}
+                            <span class="date sub-text"><a href="{{ path('user_profile', {'slug': reply.user.randomAuth} ) }}">
+                              {{ reply.user.firstName }}</a> on {{ reply.created | date('F jS, Y') }}
                               {% if app.user %}
                                 {% if app.user and app.user.firstName == post.user.firstName or app.user.firstName == reply.user.firstName %}
                                 | <a style="cursor: pointer;" class="text-muted" id="deleteReply_{{ reply.id }}">

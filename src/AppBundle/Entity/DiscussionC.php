@@ -21,7 +21,7 @@ class DiscussionC
     private $created;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="discussionCs")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="author", referencedColumnName="id")
      */
 

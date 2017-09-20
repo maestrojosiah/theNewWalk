@@ -16,19 +16,20 @@
 		<div class="col-md-2 column">
 
 	        {% if profilePhoto is defined %}
-	          <img class="img-thumbnail" alt="140x140" id="profPic" src="{{ asset('photos/profile/' ~ profilePhoto.filename) }}" />
+	          <a href="{{ path('upload_photo') }}" title="Upload a photo">
+	          	<img style="cursor:pointer" class="img-thumbnail" alt="140x140" id="profPic" src="{{ asset('photos/profile/picture/' ~ user.randomAuth ~ '.png') }}" />
+	          </a>
 	        {% else %}
-	          <img class="img-thumbnail" alt="140x140" id="profPic" src="{{ asset('photos/default_' ~ user.gender ~ '.png') }}" />
+	          <a href="{{ path('upload_photo') }}" title="Upload a photo">
+	          	<img style="cursor:pointer" class="img-thumbnail" alt="140x140" id="profPic" src="{{ asset('photos/default_' ~ user.gender ~ '.png') }}" />
+	          </a>
 	        {% endif %}
-			<a href="{{ path('upload_photo') }}">
-				Upload Photo
-			</a>
 		</div>
 		<div class="col-md-8 column">
 			<blockquote>
 				<p>
-					Potter Guy
-				</p> <small>21 / M / Single / Straight <cite>London England</cite></small>
+					{{ user.firstName|capitalize }} {{ user.lastName|capitalize }}
+				</p> 
 			</blockquote>
 		</div>
 		<div class="col-md-2 column">
@@ -49,7 +50,7 @@
 		<div class="col-md-8 column">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    Basic Tabs
+                    Profile
                 </div>
                 <!-- /.panel-heading -->
                 <div class="panel-body">
@@ -71,12 +72,13 @@
 					<!-- Tab panes -->
 					<div class="tab-content">
 					  <div class="tab-pane active" id="home" role="tabpanel">
-					  {% if user.posts %}
-					  	<ul>
-					  	{% for post in user.posts %}
-					  		<li><a href="{{ path('show_post', {'id': post.id, 'title': post.title}) }}">{{post.title}}</a></li>
+					  {% if posts is defined %}
+					  <div class="list-group">
+					  	{% for post in posts %}
+					  		<a href="#" class="list-group-item list-group-item-action">{{ post.title }}</a>
 					  	{% endfor %}
-					  	</ul>
+					  		<a href="{{ path('homepage_with_conditions', {'column': 'user', 'condition': user.id} ) }}" class="list-group-item list-group-item-action active">See all posts</a>
+						</div>
 					  {% endif %}
 					  </div>
 					  <div class="tab-pane" id="profile" role="tabpanel">
@@ -100,18 +102,20 @@
 		                                    <tbody>
 		                                    	{% for photo in photos %}
 		                                    		{% if photo.profile == true %}
-	         	 										{% set profClass = "text-success" %}
+	         	 										{% set profClass = "text-success sm-text" %}
 	         	 									{% else %}	
-	         	 										{% set profClass = "text-black" %}
+	         	 										{% set profClass = "text-black sm-text" %}
 	         	 									{% endif %}	
 			                                        <tr>
-			                                            <td><img src="{{ asset('photos/profile/' ~ photo.filename ) }}" style="width:50px; height:50px;" /></td>
+			                                            <td><a href="{{ asset('photos/profile/' ~ photo.filename ) }}" class="gallery" alt="{{ photo.caption }} <br /> <a href='{{ path('view_photo', {'id': photo.id } ) }}' class='btn btn-primary'>View / Comment</a>"><img src="{{ asset('photos/profile/' ~ photo.filename ) }}" style="width:50px; height:50px; cursor:pointer" /></a></td>
 			                                            <td>{{ photo.caption }}</td>
-			                                            <td><span style="cursor:pointer" class={{profClass}} id="makeProfile_{{photo.id}}">Profile</span> | <a href="{{ path('edit_photo', {'id': photo.id}) }}">Edit</a> | <a href="{{ path('delete_photo', {'id': photo.id}) }}">Delete</a></td>
+			                                            <td><a class='{{profClass}}' href="{{ path('crop_profile_picture', { 'id': photo.id } ) }}">Make Profile</a> | <a class="text-danger sm-text" href="{{ path('delete_photo', {'id': photo.id}) }}">Delete</a></td>
+			                                            {# <td><span style="cursor:pointer" class={{profClass}} id="makeProfile_{{photo.id}}">Profile</span> | <a href="{{ path('edit_photo', {'id': photo.id}) }}">Edit</a> | <a href="{{ path('delete_photo', {'id': photo.id}) }}">Delete</a></td> #}
 			                                        </tr>
 		                                    	{% endfor %}
 		                                    </tbody>
 		                                </table>
+		                                <a class="btn btn-block btn-primary" href="{{ path( 'view_all_photos', {'user': user.id} ) }}">See all photos</a>
 		                            </div>
 		                            <!-- /.table-responsive -->
 		                        </div>
@@ -163,8 +167,24 @@
 		</div>					
 	</div>
 </div>
-{# <div>
-  <img id="image" src="{{ asset('photos/default_boy.png') }}">
-</div>
- #}
+{% endblock %}
+
+{% block javascripts %}
+	<script>
+		$(document).ready(function(){
+			$('.gallery').featherlightGallery({
+				gallery: {
+					fadeIn: 300,
+					fadeOut: 300
+				},
+				openSpeed:    300,
+				closeSpeed:   300,
+			    afterContent: function() {
+			        this.$legend = this.$legend || $('<div class="legend"/>').insertAfter(this.$content);
+			        this.$legend.html(this.$currentTarget.attr('alt'));
+			    }				
+			});
+
+		});
+	</script>
 {% endblock %}
