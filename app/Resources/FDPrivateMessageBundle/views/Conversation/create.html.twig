@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+{% block header %}
+<!-- Page Header -->
+<header class="masthead" style=" height:100px; background-image: url('{{ asset('img/home-bg.jpg') }}')">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+      </div>
+    </div>
+  </div>
+</header>
+{% endblock %}
+{% block content %}
+    <div class="container">
+      <div class="row infinite-container">
+        <div class="col-lg-8 col-md-10 mx-auto infinite-item">
+			{{ form_start(form) }}
+			    {{ form_widget(form) }}
+
+			    <div>
+			        <input type="submit" value="{{ 'conversation.create.submit' | trans }}">
+			    </div>
+			{{ form_end(form) }}
+
+			{{ dump(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block includeCreate %}
+{% endblock %}

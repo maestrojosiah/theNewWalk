@@ -93,14 +93,15 @@
               <a class="nav-link" href="{{ path('lesson_homepage') }}">Lesson</a>
             </li>
             {{ mgilet_notification_render({ 'display': 'dropdown', 'seen': false}) }}            <li class="nav-item dropdown show">
-                 <a class="dropdown-toggle nav-link" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="{{ path(link) }}">{{ app.user.firstName }}</a>
                 {% if app.user %}
+                 <a class="dropdown-toggle nav-link" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="{{ path(link) }}">{{ app.user.firstName }}</a>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <a class="dropdown-item" href="{{ path('user_profile', {'slug': app.user.randomAuth } ) }}">My account</a>
                     <a class="dropdown-item" href="#">My articles</a>
                     <a class="dropdown-item" href="{{ path('logout') }}">Logout</a>
                   </div>
                 {% else %}
+                 <a class="dropdown-toggle nav-link" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="{{ path(link) }}">Login</a>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <a class="dropdown-item" href="{{ path('login') }}">Login</a>
                     <a class="dropdown-item" href="{{ path('user_registration') }}">Register</a>

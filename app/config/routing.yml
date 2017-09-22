@@ -8,3 +8,6 @@ logout:
 mgilet_notifications:
     resource: "@MgiletNotificationBundle/Controller/"
     prefix: /notifications
+
+fd_private_message:
+    resource: "@FDPrivateMessageBundle/Resources/config/routing.yml"

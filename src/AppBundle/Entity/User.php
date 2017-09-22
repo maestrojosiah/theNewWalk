@@ -40,8 +40,9 @@ class User implements UserNotificationInterface, AdvancedUserInterface, \Seriali
     private $email;
 
     /**
-     * @Assert\NotBlank()
+     * 
      * @Assert\Length(max=4096)
+     * @Assert\Length(min=4)
      */
     private $plainPassword;
 
@@ -153,6 +154,10 @@ class User implements UserNotificationInterface, AdvancedUserInterface, \Seriali
         $this->articles = new ArrayCollection();
         $this->isAdmin = false;
         $this->active = true;
+    }    
+
+    public function __toString() {
+        return $this->email;
     }    
 
     /**

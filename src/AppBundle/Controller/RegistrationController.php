@@ -50,4 +50,66 @@ class RegistrationController extends Controller
             array('user' => ['firstName'=>'anonymous', 'action'=>'register'], 'form' => $form->createView())
         );
     }
+
+
+    /**
+     * @Route("/makeup/register", name="makeup_registration")
+     */
+    public function registerMakeupAction(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $userArray =
+array (
+  316 => 
+  array (
+    'first_name' => 'Josephine',
+    'last_name' => ' Jemutai',
+    'email' => 'josphinejemutai2@gmail.com',
+    'password' => '18041293',
+    'gender' => 'Female',
+  ),
+  317 => 
+  array (
+    'first_name' => 'Allan',
+    'last_name' => 'Mogusu ',
+    'email' => 'allannelly690@gmail.com',
+    'password' => 'allannyabayo069',
+    'gender' => 'Male',
+  ),
+  318 => 
+  array (
+    'first_name' => 'Allan',
+    'last_name' => 'Mogusu ',
+    'email' => 'allannelly@rocketmail.com',
+    'password' => '2532',
+    'gender' => 'Male',
+  ),
+);        
+        // 1) build the form
+        foreach($userArray as $userSingle){
+            $user = new User();
+            $password = $passwordEncoder->encodePassword($user, $userSingle['password']);
+            $user->setPassword($password);
+
+            //generate a random unique code for authentication
+            $byte_code = random_bytes(12);
+            $code_first = base64_encode($byte_code);
+            $code = str_replace("/", "g", $code_first);
+            $user->setRandomAuth($code);
+
+            $user->setFirstName($userSingle['first_name']);
+            $user->setLastName($userSingle['last_name']);
+            $user->setEmail($userSingle['email']);
+            $user->setGender($userSingle['gender']);
+            $user->setIsAdmin(false);
+            $user->setActive(true);
+
+            // 4) save the User!
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+        }
+        
+        $data['userArray'] = $userArray;
+        return $this->render('registration/makeup.html.twig', $data  );
+    }
 }

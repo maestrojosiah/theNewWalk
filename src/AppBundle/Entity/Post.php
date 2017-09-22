@@ -65,15 +65,10 @@ class Post
      */
     private $likes;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Notifier", mappedBy="post")
-     */
-    private $notifications;
 
     public function __construct()
     {
         $this->comments = new ArrayCollection();
-        $this->notifications = new ArrayCollection();
         $this->likes = new ArrayCollection();
         $this->group = null;
     }    
@@ -250,40 +245,6 @@ class Post
     public function getLikes()
     {
         return $this->likes;
-    }
-
-    /**
-     * Add notification
-     *
-     * @param \AppBundle\Entity\Notifier $notification
-     *
-     * @return Post
-     */
-    public function addNotification(\AppBundle\Entity\Notifier $notification)
-    {
-        $this->notifications[] = $notification;
-
-        return $this;
-    }
-
-    /**
-     * Remove notification
-     *
-     * @param \AppBundle\Entity\Notifier $notification
-     */
-    public function removeNotification(\AppBundle\Entity\Notifier $notification)
-    {
-        $this->notifications->removeElement($notification);
-    }
-
-    /**
-     * Get notifications
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getNotifications()
-    {
-        return $this->notifications;
     }
 
     /**

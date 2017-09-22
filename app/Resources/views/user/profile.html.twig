@@ -1,172 +1,174 @@
 {% extends 'base.html.twig' %}
 {% block header %}
 <!-- Page Header -->
-<header class="masthead" style=" height:100px; background-image: url('{{ asset('img/home-bg.jpg') }}')">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-md-10 mx-auto">
-      </div>
-    </div>
-  </div>
+<div class="row">
+	<div class="container">
+	    <div class="fb-profile">
+	        <img align="left" class="fb-image-lg" src="{{ asset('img/profile-bg.jpg') }}" alt="Profile image example"/>
+	        {% if profilePhoto is defined %}
+	        {% if app.user.email == user.email %}<a href="{{ path('upload_photo') }}" title="Upload a photo">{% else %} <a href="#"> {% endif %}
+	        	<img align="left" class="fb-image-profile thumbnail" src="{{ asset('photos/profile/picture/' ~ user.randomAuth ~ '.png') }}" alt="Profile Picture" style="cursor:pointer;"/>
+	        </a>
+	        {% else %}
+	        {% if app.user and app.user.email == user.email %}<a href="{{ path('upload_photo') }}" title="Upload a photo">{% else %} <a href="#"> {% endif %}
+	        	<img align="left" class="fb-image-profile thumbnail" src="{{ asset('photos/default_' ~ user.gender ~ '.png') }}" alt="Profile picture" style="cursor:pointer;"/>
+	        </a>
+	        {% endif %}
+	        <div class="fb-profile-text">
+	            <h1>{{ user.firstName|capitalize }} {{ user.lastName|capitalize }}</h1>
+	            <span>New Walker.</span>
+	            {% if app.user and app.user.email == user.email %}
+			 	 <a href="{{ path( 'view_all_photos', {'user': user.id} ) }}" style="text-decoration:none;">
+				 <button class="btn btn-default" type="button">
+	                Photos
+	             </button>
+	          	 </a>
+	             <a  href="{{ path('fdpm_list_conversations') }}" style="text-decoration:none;">
+	             <button class="btn btn-default" type="button">
+	                Conversations
+	             </button>
+	         	 </a>
+			 	 <a href="{{ path('homepage_with_conditions', {'column': 'user', 'condition': user.id} ) }}" style="text-decoration:none;">
+	             <button class="btn btn-default" type="button">
+	                Posts
+	             </button>
+	             </a>
+	             {% endif %}		 
+	        </div>
+
+	    </div>
+	</div>
+</div> <!-- /container -->  
 </header>
 {% endblock %}
 {% block content %}
+{% if app.user %}
 <div class="container">
-    <div class="row clearfix well">
-		<div class="col-md-2 column">
-
-	        {% if profilePhoto is defined %}
-	          <a href="{{ path('upload_photo') }}" title="Upload a photo">
-	          	<img style="cursor:pointer" class="img-thumbnail" alt="140x140" id="profPic" src="{{ asset('photos/profile/picture/' ~ user.randomAuth ~ '.png') }}" />
-	          </a>
-	        {% else %}
-	          <a href="{{ path('upload_photo') }}" title="Upload a photo">
-	          	<img style="cursor:pointer" class="img-thumbnail" alt="140x140" id="profPic" src="{{ asset('photos/default_' ~ user.gender ~ '.png') }}" />
-	          </a>
-	        {% endif %}
-		</div>
-		<div class="col-md-8 column">
-			<blockquote>
-				<p>
-					{{ user.firstName|capitalize }} {{ user.lastName|capitalize }}
-				</p> 
-			</blockquote>
-		</div>
-		<div class="col-md-2 column">
-		 
-			 <button class="btn btn-default btn-block" type="button">
-                Poke
-             </button>
-             <button class="btn btn-default btn-block" type="button">
-                Message
-             </button>
-             <button class="btn btn-default btn-block" type="button">
-                Save
-             </button>
-                 		 
-		</div>
-	</div>
 	<div class="row clearfix">
-		<div class="col-md-8 column">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    Profile
-                </div>
-                <!-- /.panel-heading -->
-                <div class="panel-body">
-					<!-- Nav tabs -->
-					<ul class="nav nav-tabs" role="tablist">
-					  <li class="nav-item">
-					    <a class="nav-link active" data-toggle="tab" href="#home" role="tab">Posts</a>
-					  </li>
-					  <li class="nav-item">
-					    <a class="nav-link" data-toggle="tab" href="#profile" role="tab">Photos</a>
-					  </li>
-					  <li class="nav-item">
-					    <a class="nav-link" data-toggle="tab" href="#messages" role="tab">Messages</a>
-					  </li>
-					  <li class="nav-item">
-					    <a class="nav-link" data-toggle="tab" href="#settings" role="tab">Settings</a>
-					  </li>
-					</ul>
-					<!-- Tab panes -->
-					<div class="tab-content">
-					  <div class="tab-pane active" id="home" role="tabpanel">
-					  {% if posts is defined %}
-					  <div class="list-group">
-					  	{% for post in posts %}
-					  		<a href="#" class="list-group-item list-group-item-action">{{ post.title }}</a>
-					  	{% endfor %}
-					  		<a href="{{ path('homepage_with_conditions', {'column': 'user', 'condition': user.id} ) }}" class="list-group-item list-group-item-action active">See all posts</a>
-						</div>
-					  {% endif %}
-					  </div>
-					  <div class="tab-pane" id="profile" role="tabpanel">
-					  	{% if photos is defined %}
-						<div class="col-lg-12">		
-		                    <div class="panel panel-default">
-		                        <div class="panel-heading">
-		                            Basic Table
-		                        </div>
-		                        <!-- /.panel-heading -->
-		                        <div class="panel-body">
-		                            <div class="table-responsive">
-		                                <table class="table">
-		                                    <thead>
-		                                        <tr>
-		                                            <th>Photo</th>
-		                                            <th>Description</th>
-		                                            <th>Manage</th>
-		                                        </tr>
-		                                    </thead>
-		                                    <tbody>
-		                                    	{% for photo in photos %}
-		                                    		{% if photo.profile == true %}
-	         	 										{% set profClass = "text-success sm-text" %}
-	         	 									{% else %}	
-	         	 										{% set profClass = "text-black sm-text" %}
-	         	 									{% endif %}	
-			                                        <tr>
-			                                            <td><a href="{{ asset('photos/profile/' ~ photo.filename ) }}" class="gallery" alt="{{ photo.caption }} <br /> <a href='{{ path('view_photo', {'id': photo.id } ) }}' class='btn btn-primary'>View / Comment</a>"><img src="{{ asset('photos/profile/' ~ photo.filename ) }}" style="width:50px; height:50px; cursor:pointer" /></a></td>
-			                                            <td>{{ photo.caption }}</td>
-			                                            <td><a class='{{profClass}}' href="{{ path('crop_profile_picture', { 'id': photo.id } ) }}">Make Profile</a> | <a class="text-danger sm-text" href="{{ path('delete_photo', {'id': photo.id}) }}">Delete</a></td>
-			                                            {# <td><span style="cursor:pointer" class={{profClass}} id="makeProfile_{{photo.id}}">Profile</span> | <a href="{{ path('edit_photo', {'id': photo.id}) }}">Edit</a> | <a href="{{ path('delete_photo', {'id': photo.id}) }}">Delete</a></td> #}
-			                                        </tr>
-		                                    	{% endfor %}
-		                                    </tbody>
-		                                </table>
-		                                <a class="btn btn-block btn-primary" href="{{ path( 'view_all_photos', {'user': user.id} ) }}">See all photos</a>
-		                            </div>
-		                            <!-- /.table-responsive -->
-		                        </div>
-		                        <!-- /.panel-body -->
-		                    </div>
-		                    <!-- /.panel -->
-		                </div>
-		            	{% endif %}
-					  </div>
-					  <div class="tab-pane" id="messages" role="tabpanel">.asg</div>
-					  <div class="tab-pane" id="settings" role="tabpanel">gaa.</div>
-					</div>	
-                </div>
-                <!-- /.panel-body -->
-            </div>
-            <!-- /.panel -->
+		<div class="col-md-12 column">
+		<hr>
+
+		<div class="card">
+		  <div class="card-block">
+		    <h4 class="card-title">Posts</h4>
+	    		{% if posts is defined %}
+				  <div class="list-group">
+				  	{% for post in posts %}
+				  		<a href="{{ path('show_post', {'id':post.id, 'title':post.title } )}}" class="list-group-item list-group-item-action">{{ post.title }}</a>
+				  	{% endfor %}				  		
+					</div>
+				 {% endif %}
+		    <a href="{{ path('homepage_with_conditions', {'column': 'user', 'condition': user.id} ) }}" class="btn btn-primary">See all posts</a>
+		  </div>
 		</div>	
-		<div class="col-md-4 column">
-			<table class="table">
-				<thead>
-					<tr>
-						<th>
-							Details
-						</th>
-						<th>
-							His/ Her
-						</th> 
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							Last Online
-						</td>
-						<td>
-							1 hour ago
-						</td>
-					</tr>
-                    <tr>
-						<td>
-							Ethinicity
-						</td>
-						<td>
-							White
-						</td>
-					</tr>
-				</tbody>
-			</table>
-		</div>					
+	<hr>
+		<div class="card">
+		  <div class="card-block">
+		    <h4 class="card-title">Photos</h4>
+			  	{% if photos is defined %}
+				<div class="col-lg-12">		
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Basic Table
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Photo</th>
+                                            <th>Description</th>
+                                            {% if app.user.email == user.email %}
+                                            <th>Manage</th>
+                                        	{% endif %}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    	{% for photo in photos %}
+                                    		{% if photo.profile == true %}
+     	 										{% set profClass = "text-success sm-text" %}
+     	 									{% else %}	
+     	 										{% set profClass = "text-black sm-text" %}
+     	 									{% endif %}	
+	                                        <tr>
+	                                            <td><a href="{{ asset('photos/profile/' ~ photo.filename ) }}" class="gallery" alt="{{ photo.caption }} <br /> <a href='{{ path('view_photo', {'id': photo.id } ) }}' class='btn btn-primary'>View / Comment</a>"><img src="{{ asset('photos/profile/' ~ photo.filename ) }}" style="width:50px; height:50px; cursor:pointer" /></a></td>
+	                                            <td>{{ photo.caption }}</td>
+	                                            {% if app.user.email == user.email %}
+	                                            <td><a class='{{profClass}}' href="{{ path('crop_profile_picture', { 'id': photo.id } ) }}">Make Profile</a> | <a class="text-danger sm-text" href="{{ path('delete_photo', {'id': photo.id}) }}">Delete</a></td>
+	                                            {% endif %}
+	                                            {# <td><span style="cursor:pointer" class={{profClass}} id="makeProfile_{{photo.id}}">Profile</span> | <a href="{{ path('edit_photo', {'id': photo.id}) }}">Edit</a> | <a href="{{ path('delete_photo', {'id': photo.id}) }}">Delete</a></td> #}
+	                                        </tr>
+                                    	{% endfor %}
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                            <!-- /.table-responsive -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+            	{% endif %}		    
+		    <a class="btn btn-primary" href="{{ path( 'view_all_photos', {'user': user.id} ) }}">See all photos</a>
+		  </div>
+		</div>	
+		<hr>
+		<div class="card">
+		  <div class="card-block">
+		    <h4 class="card-title">Posts</h4>
+	        <h5>Personal info</h5>
+	        {% if app.user and app.user.email == user.email %}<a href="{{ path('upload_photo') }}" class="btn btn-sm btn-success">Upload a photo</a>{% endif %}
+	        <form class="form-horizontal" role="form">
+	          <div class="form-group">
+	            <div class="col-lg-8">
+	              <span class="control-label">First name:</span>
+	              <span id="first_name" class="form-control">{{ user.firstName }}</span>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <div class="col-lg-8">
+	              <span class="control-label">Last name:</span>
+	              <span id="last_name" class="form-control">{{ user.lastName }}</span>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <div class="col-lg-8">
+	              <span class="control-label">Email:</span>
+	              <span id="email" class="form-control">{{ user.email }}</span>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	            <div class="col-lg-8">
+	              <span class="control-label">Gender:</span>
+	              <span  id="gender" class="form-control">{{ user.gender }}</span>
+	            </div>
+	          </div>
+	          <div class="form-group">
+	          	{% if app.user and app.user.email == user.email %}
+	            <div class="col-lg-8">
+	              <input class="btn btn-primary" value="Edit" id="editProfile" type="button">
+	              <span></span>
+	              <input class="btn btn-primary" value="Save Changes" id="saveEdit" type="button">
+	              <span></span>
+	              <input class="btn btn-default" value="Cancel" id="cancelEdit" type="button">
+	            </div>
+	        	{% endif %}
+	          </div>
+	        </form>
+		  </div>
+		</div>	
+{% else %}
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 text-center">
+				<a href="{{ path('login') }}" class="btn btn-sm btn-primary">Login</a>
+				<a href="{{ path('user_registration') }}" class="btn btn-sm btn-info">Register</a>
+			</div>
+		</div>
 	</div>
-</div>
+{% endif %}
 {% endblock %}
 
 {% block javascripts %}
@@ -186,5 +188,14 @@
 			});
 
 		});
+	</script>
+
+	<script type="text/javascript">
+	$("#editProfile").click( function() {
+		$("#first_name").attr('contenteditable', 'true').addClass('border border-primary'); 
+		$("#last_name").attr('contenteditable', 'true').addClass('border border-primary');  
+		$("#email").attr('contenteditable', 'true').addClass('border border-primary'); 
+		$("#gender").attr('contenteditable', 'true').addClass('border border-primary'); 
+	});
 	</script>
 {% endblock %}

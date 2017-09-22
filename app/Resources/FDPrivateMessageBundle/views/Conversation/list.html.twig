@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+{% block header %}
+<!-- Page Header -->
+<header class="masthead" style=" height:100px; background-image: url('{{ asset('img/home-bg.jpg') }}')">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-md-10 mx-auto">
+      </div>
+    </div>
+  </div>
+</header>
+{% endblock %}
+{% block content %}
+    <div class="container">
+      <div class="row infinite-container">
+        <div class="col-lg-8 col-md-10 mx-auto"><b>Conversation list</b>  <a href="{{ url('fdpm_new_conversation') }}" class=" btn btn-sm btn-primary pull-right">Create new conversation</a></div>
+        <div class="col-lg-8 col-md-10 mx-auto infinite-item">
+            <div class="list-group">
+            {% for conversation in conversations %}
+                  <a href="{{ url('fdpm_show_conversation', {'conversation': conversation.id}) }}" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h5 class="mb-1">{{ conversation.subject }}</h5>
+                      <small>{{ conversation.lastMessage.created | date('M j o, h:i a') }}</small>
+                    </div>
+                    <p class="mb-1">{{ conversation.lastMessage.body }}</p>
+                    <small>{% for recipient in conversation.recipients %} <mark>{{ recipient.firstName }}</mark> {% endfor %}</small>
+                  </a>
+            {% else %}
+                  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h5 class="mb-1">No conversations yet</h5>
+                      <small class="text-muted">:(</small>
+                    </div>
+                    <p class="mb-1">Click here to start a conversation</p>
+                    <small class="text-muted">Start new conversation.</small>
+                  </a>
+            {% endfor %}
+            </div>    
+            
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block includeCreate %}
+{% endblock %}

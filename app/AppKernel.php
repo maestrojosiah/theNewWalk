@@ -18,6 +18,7 @@ class AppKernel extends Kernel
             new AppBundle\AppBundle(),
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
 	        new Mgilet\NotificationBundle\MgiletNotificationBundle(),
+            new FD\PrivateMessageBundle\FDPrivateMessageBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
