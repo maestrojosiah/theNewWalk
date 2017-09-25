@@ -1,0 +1,21 @@
+<!-- Modal -->
+<div class="modal fade" id="pleaseWaitModal" tabindex="-1" role="dialog" aria-labelledby="pleaseWaitModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="pleaseWaitModalLabel">Please wait...</h5>
+        {% if app.user %}
+        <a href="{{ path('user_profile', {'slug': user.randomAuth }) }}" class="close" aria-label="Close">
+        {% endif %}
+          <span aria-hidden="true">&times;</span>
+          }
+        </a>
+      </div>
+      <div class="modal-body">
+      	<p id="waiting_for_message">Please wait...</p>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>

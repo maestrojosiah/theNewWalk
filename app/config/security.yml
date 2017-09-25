@@ -26,6 +26,7 @@ security:
                 login_path: login
                 check_path: login
                 default_target_path: /home
+                remember_me: true
             provider: our_db_provider
             logout:
                 path: /logout

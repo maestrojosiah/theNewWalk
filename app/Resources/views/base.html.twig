@@ -2,13 +2,27 @@
 <html lang="en">
 
   <head>
+    <title>{% block title %}{% if page_title is defined %} {{ page_title }} | {% endif %}{% endblock %}The New Walk</title>
+    {% if page_description is not defined %}
+      {% set page_description = "Read more at thenewwalk website." %}
+    {% endif %}
+    {% if page_title is not defined %}
+      {% set page_title = "The New Walk" %}
+    {% endif %}
+    {% if page_image is not defined %}
+      {% set page_image = "img/home-bg.jpg" %}
+    {% endif %}
 
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>{% block title %}The New Walk{% endblock %}</title>
+    <meta name="viewport"                  content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description"               content="A social christian platform. Read articles, discussions and much more inpiring posts.">
+    <meta name="author"                    content="MaestroJosiah">
+    <meta property="og:url"                content="{{ app.request.uri }}" />
+    <meta property="og:type"               content="article" />
+    <meta property="og:title"              content="{{ page_title }}" />
+    <meta property="og:description"        content="{{ page_description }}" />
+    <meta property="og:image"              content="{{ asset(page_image) }}" />
+    
     {% block stylesheets %}{% endblock %}
 
     <!-- Bootstrap core CSS -->
@@ -21,6 +35,7 @@
     <link href="{{ asset('vendor/font-awesome/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="{{ asset('favicon.png') }}">
 
     <!-- Custom styles for this template -->
     <link href="{{ asset('css/clean-blog.css') }}" rel="stylesheet">
@@ -33,7 +48,7 @@
     <!-- styles for featherlight -->    
     <link  href="{{ asset('featherlight/release/featherlight.min.css') }}" rel="stylesheet">
     <link  href="{{ asset('featherlight/release/featherlight.gallery.min.css') }}" rel="stylesheet">
-
+    <script type="text/javascript" src="//platform-api.sharethis.com/js/sharethis.js#property=59c8b27b9b774c0011659069&product=inline-share-buttons"></script>
   </head>
 
   <body>
@@ -66,7 +81,7 @@
         <form class="navbar-form" role="search">
         <div class="input-group">
             <input type="text" id="searchItem" class="form-input form-control" placeholder="Search Posts" name="q">
-            <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button>
+            {# <button class="btn btn-default" type="submit"><i class="fa fa-search"></i></button> #}
         </div>
         </form>
         <div class="panel panel-default" id="searchResults" style="position: absolute; left: 20px; top: 70px;">
@@ -126,6 +141,7 @@
               {% if app.user and form is defined and form is not empty %}
                 <button type="button" class="btn btn-outline btn-primary btn-lg" data-toggle="modal" data-target="#createModal">Create Post</button>
               {% endif %}
+                <a href="{{ path('lesson_homepage') }}" class="btn btn-outline btn-primary btn-lg">Weekly Lesson</a>
             </div>
           </div>
         </div>
@@ -136,47 +152,14 @@
 
     <hr>
 
-    <!-- Footer -->
-    <footer>
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 col-md-10 mx-auto">
-            <ul class="list-inline text-center">
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-              <li class="list-inline-item">
-                <a href="#">
-                  <span class="fa-stack fa-lg">
-                    <i class="fa fa-circle fa-stack-2x"></i>
-                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-                  </span>
-                </a>
-              </li>
-            </ul>
-            <p class="copyright text-muted">Copyright &copy; Your Website 2017</p>
-          </div>
-        </div>
-      </div>
-    </footer>
+    {{ include('templates/footer.html.twig') }}
+
     {% block includeCreate %}
     {% if app.user and form is defined and form is not empty %}
     <!-- Modal -->
     {{ include('templates/createModal.html.twig') }}       
     {% endif %}
+    {{ include('templates/pleaseWait.html.twig') }}       
     {% endblock %}
 
 
@@ -225,7 +208,7 @@
 
     <script type="text/javascript">
       $(document).on('click', '[id^="followNotif_"]', function(){ 
-        //when you click on "comment" button to repond to a post
+        // when you click on a notification, mark it as seen
         var nameId = jQuery(this).attr("id");
         var arrStr = nameId.split("_");
         var id = arrStr[1];
@@ -280,6 +263,7 @@
       var nameId = jQuery(this).attr("id");
       var arrStr = nameId.split("_");
       var id = arrStr[1];
+      $(this).hide();
   
       var comment = $("#comment").val();
 
@@ -297,6 +281,7 @@
               console.log(data.comment);
               $("#commentHolder").append(data.comment);
               $("#comment").val("");
+              $("#addComment_"+id).show()
             }
         });
 
@@ -304,10 +289,11 @@
     </script>
     <script>
     $(document).on('click', '[id^="addPhotoComment_"]', function(){ 
-      //when you click on "comment" button to repond to a post
+      //when you click on "comment" button to comment to a photo
       var nameId = jQuery(this).attr("id");
       var arrStr = nameId.split("_");
       var id = arrStr[1];
+      $(this).hide();
   
       var comment = $("#comment").val();
 
@@ -325,6 +311,7 @@
               console.log(data.comment);
               $("#commentHolder").append(data.comment);
               $("#comment").val("");
+              $("#addPhotoComment_"+id).show();
             }
         });
 
@@ -333,6 +320,8 @@
 {% if app.user %}
     <script>
     $(document).on('click', '[id^="makeProfile_"]', function(){ 
+      $('#pleaseWaitModal').modal('show');
+      $('#waiting_for_message').html('Creating profile picture... <br /> Please wait... this may take a while...');
       //when you click on "make profile" button to change profile picture
       var nameId = jQuery(this).attr("id");
       var arrStr = nameId.split("_");
@@ -349,6 +338,7 @@
         processData: false,
         contentType: false,
         success: function (data) {
+          console.log("upload: "+data.type);
           $.ajax({
             url:'{{ (path('make_profile_picture')) }}',
             type: "POST",
@@ -379,6 +369,7 @@
       var nameId = jQuery(this).attr("id");
       var arrStr = nameId.split("_");
       var id = arrStr[1];
+      $(this).hide();
   
       var comment = $("#commentBody_"+id).text();
 
@@ -411,6 +402,7 @@
       var nameId = jQuery(this).attr("id");
       var arrStr = nameId.split("_");
       var id = arrStr[1];
+      $(this).hide();
   
       var comment = $("#commentBody_"+id).text();
 
@@ -443,6 +435,7 @@
       var nameId = jQuery(this).attr("id");
       var arrStr = nameId.split("_");
       var id = arrStr[1];
+      $(this).hide();
   
       var reply = $("#replyBody_"+id).text();
 
@@ -546,6 +539,7 @@
         var nameId = jQuery(this).attr("id");
         var arrStr = nameId.split("_");
         var id = arrStr[1];
+        $(this).hide();
     
         var commentReply = $("#commentReply_"+id).val();
 
@@ -564,6 +558,7 @@
                 var replyBeginning = '<li><div class="commenterImage"><img src=\'{{ asset(myProfPicLink) }}\'style="width:30px; height:30px;" /></div>';
                 $("#commentList_"+id).append(replyBeginning + data.commentReply);
                 $("#commentReply_"+id).val("");
+                $("#addCommentReply_"+id).show()
               }
           });
 
@@ -613,6 +608,8 @@
         var nameId = jQuery(this).attr("id");
         var arrStr = nameId.split("_");
         var id = arrStr[1];
+        $(this).hide();
+
         $.ajax({
             url:'{{ (path('add_like')) }}',
             type: "POST",
@@ -626,6 +623,7 @@
                 $("#likeArticle_"+id).removeClass("btn-"+data.prevClass);
                 $("#likeArticle_"+id).addClass("btn-"+data.class);
                 $("#countLikes").text(" "+data.likes+" ");
+                $("#likeArticle_"+id).show();
             }
         });
 
@@ -656,22 +654,10 @@
 
           $('textarea').autogrow({vertical: true, horizontal: false, flickering: false});
 
-          // (function(w, $) {
-
-          //     'use strict';
-
-          //     $(function() {
-          //         $('.cropper').each(function() {
-          //             new Cropper($(this));
-          //         });
-          //     });
-
-          // })(window, jQuery);      
-          //new Crop($('#crop'), 16/9);
       });
     </script>
     {% block javascripts %}{% endblock %}
-    
+
   </body>
 
 </html>

@@ -8,6 +8,6 @@ class MessageBundle extends Bundle
 {
     public function getParent()
     {
-        return 'FDPrivateMessageBundle';
+        return 'FD\PrivateMessageBundle\FDPrivateMessageBundle';
     }
 }

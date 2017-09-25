@@ -1,4 +1,5 @@
 {% extends 'base_article.html.twig' %}
+    {% set page_title = article.title %}
     {% block header %}
     <!-- Page Header -->
     <header class="masthead" style="background-image: url('{{ asset('img/article-bg.jpg') }}')">
@@ -58,7 +59,7 @@
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
 
-            {{ article.body|raw }}
+            {{ article.body|raw|nl2br }}
           </div>
           <section id="commentHolder" class="col-lg-8 col-md-10 mx-auto">
             <div class="titleBox">
@@ -81,10 +82,10 @@
                         {% if app.user and app.user.firstName == article.user.firstName or app.user.firstName == comment.user.firstName %}
                          | <a href="#" class="text-muted sm-text" data-toggle="modal" data-target="#deleteCommentModal{{ comment.id }}">
                             Delete
-                          </a>
+                          </a>{% if app.user.firstName == comment.user.firstName %}
                           | <span style="cursor: pointer;" class="text-muted sm-text" id="editComment_{{ comment.id }}">
                             Edit
-                          </span>
+                          </span>{% endif %}
                         {% endif %}
                       {% endif %}
 
@@ -127,10 +128,10 @@
                                 {% if app.user and app.user.firstName == article.user.firstName or app.user.firstName == reply.user.firstName %}
                                 | <a style="cursor: pointer;" class="text-muted" id="deleteReply_{{ reply.id }}">
                                   Delete
-                                </a>
+                                </a>{% if app.user.firstName == reply.user.firstName %}
                                 | <a style="cursor: pointer;" class="text-muted" id="editReply_{{ reply.id }}">
                                   Edit
-                                </a>
+                                </a>{% endif %}
                                 {% endif %}
                               {% endif %}
                             </span>

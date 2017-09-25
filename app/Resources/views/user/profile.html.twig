@@ -57,8 +57,10 @@
 				  		<a href="{{ path('show_post', {'id':post.id, 'title':post.title } )}}" class="list-group-item list-group-item-action">{{ post.title }}</a>
 				  	{% endfor %}				  		
 					</div>
+		   			<a href="{{ path('homepage_with_conditions', {'column': 'user', 'condition': user.id} ) }}" class="btn btn-primary">See all posts</a>
+            	 {% else %}
+            		No posts {% if app.user and app.user.email == user.email %}<a href="{{ path('homepage') }}" class="sm-text">Add</a>{% endif %}
 				 {% endif %}
-		    <a href="{{ path('homepage_with_conditions', {'column': 'user', 'condition': user.id} ) }}" class="btn btn-primary">See all posts</a>
 		  </div>
 		</div>	
 	<hr>
@@ -69,7 +71,7 @@
 				<div class="col-lg-12">		
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            Basic Table
+                            Photos
                         </div>
                         <!-- /.panel-heading -->
                         <div class="panel-body">
@@ -110,16 +112,19 @@
                     </div>
                     <!-- /.panel -->
                 </div>
+		    	<a class="btn btn-primary" href="{{ path( 'view_all_photos', {'user': user.id} ) }}">See all photos</a>
+            	{% else %}
+            		No photos {% if app.user and app.user.email == user.email %}<a href="{{ path('upload_photo') }}" class="sm-text">Upload</a>{% endif %}
             	{% endif %}		    
-		    <a class="btn btn-primary" href="{{ path( 'view_all_photos', {'user': user.id} ) }}">See all photos</a>
 		  </div>
 		</div>	
 		<hr>
+		{% if app.user and app.user.email == user.email %}
 		<div class="card">
 		  <div class="card-block">
 		    <h4 class="card-title">Posts</h4>
 	        <h5>Personal info</h5>
-	        {% if app.user and app.user.email == user.email %}<a href="{{ path('upload_photo') }}" class="btn btn-sm btn-success">Upload a photo</a>{% endif %}
+	        <a href="{{ path('upload_photo') }}" class="btn btn-sm btn-success">Upload a photo</a>
 	        <form class="form-horizontal" role="form">
 	          <div class="form-group">
 	            <div class="col-lg-8">
@@ -159,6 +164,7 @@
 	        </form>
 		  </div>
 		</div>	
+	{% endif %}
 {% else %}
 	<div class="container">
 		<div class="row">
@@ -198,4 +204,40 @@
 		$("#gender").attr('contenteditable', 'true').addClass('border border-primary'); 
 	});
 	</script>
+    <script>
+    $(document).on('click', '[id^="saveEdit"]', function(){ 
+      //when you click on "commentEdit" button to edit a comment
+      var nameId = jQuery(this).attr("id");
+      var arrStr = nameId.split("_");
+      var id = arrStr[1];
+  
+      var first_name = $("#first_name").text();
+      var last_name = $("#last_name").text();
+      var email = $("#email").text();
+      var gender = $("#gender").text();
+
+      $.ajax({
+            url:'{{ (path('save_profile_edits')) }}',
+            type: "POST",
+            dataType: "json",
+            data: {
+                "first_name": first_name,
+                "last_name": last_name,
+                "email": email,
+                "gender": gender,                
+            },
+            async: true,
+            success: function (data)
+            {
+            alert("Changes Saved!");
+			$("#first_name").attr('contenteditable', 'false').removeClass('border border-primary'); 
+			$("#last_name").attr('contenteditable', 'false').removeClass('border border-primary');  
+			$("#email").attr('contenteditable', 'false').removeClass('border border-primary'); 
+			$("#gender").attr('contenteditable', 'false').removeClass('border border-primary'); 
+            }
+        });
+
+      });
+    </script>
+
 {% endblock %}

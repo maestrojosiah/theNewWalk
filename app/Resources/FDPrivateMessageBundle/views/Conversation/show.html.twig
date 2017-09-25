@@ -45,7 +45,7 @@
 
                   <div class="form-group mx-sm-3">
                         {{ form_errors(form.body) }}
-                        {{ form_widget(form.body, {'attr': {'class': 'form-control', 'placeholder': 'Write' }} ) }}
+                        {{ form_widget(form.body, {'attr': {'class': 'form-control', 'placeholder': 'Write', 'rows': '3' }} ) }}
                   </div>
                   <input type="submit" class="btn btn-primary" value="Send">
                 {{ form_end(form) }}

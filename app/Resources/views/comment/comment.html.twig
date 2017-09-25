@@ -30,10 +30,10 @@
                 {% if app.user and app.user.firstName == comment.user.firstName or app.user.firstName == comment.user.firstName %}
                  | <a href="#" class="text-muted sm-text" data-toggle="modal" data-target="#deleteCommentModal{{ comment.id }}">
                     Delete
-                  </a>
+                  </a>{% if app.user.firstName == comment.user.firstName %}
                   | <span style="cursor: pointer;" class="text-muted sm-text" id="editComment_{{ comment.id }}">
                     Edit
-                  </span>
+                  </span>{% endif %}
                 {% endif %}
 
           </div>
@@ -68,10 +68,10 @@
                           {% if app.user and app.user.firstName == post.user.firstName or app.user.firstName == reply.user.firstName %}
                           | <a style="cursor: pointer;" class="text-muted" id="deleteReply_{{ reply.id }}">
                             Delete
-                          </a>
+                          </a>{% if app.user.firstName == reply.user.firstName %}
                           | <a style="cursor: pointer;" class="text-muted" id="editReply_{{ reply.id }}">
                             Edit
-                          </a>
+                          </a>{% endif %}
                           {% endif %}
                         {% endif %}
                       </span>

@@ -7,9 +7,6 @@
 <div class="col-lg-8 col-md-10 mx-auto">
     <a href="#" class="btn btn-info" data-toggle="modal" data-target="#login-modal">Create Account</a>
 
-        <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;" data-backdrop="static" data-keyboard="false">
-        <div class="modal-dialog">
-        <div class="loginmodal-container">
 
 	{{ form_start(form, {'method': 'post', 'action': path('user_registration'), 'attr': {'class': 'form-signin' }} ) }}
         <h2 class="form-signin-heading">Please Sign Up</h2>
@@ -26,19 +23,16 @@
         {{ form_errors(form.email) }}
         {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'Email', 'id': 'email' }} ) }}
         <label for="password" class="sr-only">Password</label>
-		{{ form_errors(form.plainPassword.first) }}
+		  {{ form_errors(form.plainPassword.first) }}
         {{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control', 'placeholder': 'Password', 'id': 'password' }} ) }}
         <label for="password_repeat" class="sr-only">Repeat Password</label>
-		{{ form_errors(form.plainPassword.second) }}
+		  {{ form_errors(form.plainPassword.second) }}
         {{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control', 'placeholder': 'Repeat Password', 'id': 'password_repeat' }} ) }}
         <button class="btn btn-lg btn-primary btn-block" type="submit">Sign up</button>
-	{{ form_end(form) }}
+	    {{ form_end(form) }}
 
-          <div class="login-help">
-          <a href="{{path('login')}}">Login</a> - <a href="#">Forgot Password</a> - <a href="#" class="pull-right" data-dismiss="modal">Cancel</a>
-          </div>
-        </div>
-      </div>
+      <div class="login-help">
+      <a href="{{path('login')}}">Login</a> - <a href="#">Forgot Password</a> - <a href="#" class="pull-right" data-dismiss="modal">Cancel</a>
       </div>
 </div>
 </div>

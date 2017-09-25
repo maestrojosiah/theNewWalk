@@ -175,6 +175,34 @@ class AjaxController extends Controller
             return new JsonResponse($data);
     }
 
+    /**
+     * @Route("/profile/edit", name="save_profile_edits")
+     */
+    public function profileEditAction(Request $request)
+    {
+            $data = [];
+            $first_name = $request->request->get('first_name');
+            $last_name = $request->request->get('last_name');
+            $gender = $request->request->get('gender');
+            $email = $request->request->get('email');
+
+            $user = $this->get('security.token_storage')->getToken()->getUser();
+            $data['user'] = $user;
+
+            $em = $this->getDoctrine()->getManager();
+            
+            $user->setFirstName($first_name);
+            $user->setLastName($last_name);
+            $user->setEmail($email);
+            $user->setGender($gender);
+
+            $em->persist($user);
+            $em->flush($user);
+
+            
+            return new JsonResponse($data);
+    }
+
 
 
 

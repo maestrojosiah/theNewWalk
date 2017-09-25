@@ -14,15 +14,28 @@
     <div class="container">
       <div class="row infinite-container">
         <div class="col-lg-8 col-md-10 mx-auto infinite-item">
-			{{ form_start(form) }}
-			    {{ form_widget(form) }}
+    			{{ form_start(form) }}
+          <div class="form-group">
+            <label for="recipients">Recipients</label>
+            {{ form_errors(form.recipients) }}
+            {{ form_widget(form.recipients, {'attr': {'class': 'form-control', 'id': 'recipients' }} ) }}
+          </div>
+          <div class="form-group">
+          <label for="subject">Subject</label>
+              {{ form_errors(form.subject) }}
+              {{ form_widget(form.subject, {'attr': {'class': 'form-control', 'placeholder': 'Subject', 'id': 'subject' }} ) }}
+          </div>
+          <div class="form-group">
+          <label for="subject">Message</label>
+              {{ form_errors(form.firstMessage.body) }}
+              {{ form_widget(form.firstMessage.body, {'attr': {'class': 'form-control', 'id': 'message', 'rows': '3' }} ) }}
+          </div>
+
 
 			    <div>
-			        <input type="submit" value="{{ 'conversation.create.submit' | trans }}">
+			        <input type="submit" value="Send Message">
 			    </div>
-			{{ form_end(form) }}
-
-			{{ dump(form) }}
+    			{{ form_end(form) }}
         </div>
     </div>
 </div>

@@ -224,4 +224,63 @@ class ArticleCController extends Controller
         return new JsonResponse($data);
 	}
 
+    /**
+     * @Route("/makeup/article_c", name="makeup_articles")
+     */
+    public function articleMakeupAction(Request $request)
+    {
+        set_time_limit(0);
+        $articleArray = 
+array (
+  0 => 
+  array (
+    'article_id' => '5',
+    'author' => 'maestrojosiah@gmail.com',
+    'created' => '2014-04-15 21:15:45',
+    'body' => 'If every youth knew this! No wonder God says that we perish because of lack of knowledge.',
+  ),
+  1 => 
+  array (
+    'article_id' => '4',
+    'author' => 'maestrojosiah@gmail.com',
+    'created' => '2014-04-15 21:32:35',
+    'body' => 'May God help us!',
+  ),
+  2 => 
+  array (
+    'article_id' => '3',
+    'author' => 'jyn1471@gmail.com',
+    'created' => '2014-04-17 16:25:54',
+    'body' => 'if only people would help every1 realize that the devil is not young.. He know what music can do from exprience',
+  ),
+
+  );
+        // 1) build the form
+        foreach($articleArray as $articleSingle){
+            $article = new ArticleC();
+
+            $user = $this->getDoctrine()->getManager()
+                ->getRepository('AppBundle:User')
+                ->findOneByEmail($articleSingle['author']);
+
+            $article_c = $this->getDoctrine()->getManager()
+                ->getRepository('AppBundle:Article')
+                ->find($articleSingle['article_id']);
+
+            $article->setArticle($article_c);
+            $article->setUser($user);
+            $article->setBody($articleSingle['body']);
+            $article->setCreated(new \DateTime($articleSingle['created']));
+
+            // 4) save the Article!
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($article);
+            $em->flush();
+        }
+        
+        $data['articleArray'] = $user;
+        return $this->render('registration/makeup.html.twig', ['data'=>$data]  );
+    }
+
+
 }

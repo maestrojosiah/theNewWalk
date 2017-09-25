@@ -13,13 +13,13 @@
           {% if articles is not empty %}
           {% for article in articles %}
             {% set articleTitle = article.title|replace({" ": "-", "’": "", "'": ""}) %}
-            <div class="article-preview">
+            <div class="post-preview">
               <a href="{{ path('show_article', {'id':article.id, 'title':articleTitle } ) }}">
-                <h2 class="article-title">
+                <h2 class="post-title">
                   {{ article.title }}
                 </h2>
-                <h3 class="article-subtitle">
-                  _______________________________
+                <h3 class="post-subtitle">
+                  {{ article.description }}
                 </h3>
               </a>
               <p class="article-meta">Posted by

@@ -21,7 +21,7 @@ class ArticleL
     
     /**
      * @ORM\ManyToOne(targetEntity="Post", inversedBy="likes")
-     * @ORM\JoinColumn(name="article", referencedColumnName="id")
+     * @ORM\JoinColumn(name="article", referencedColumnName="id", onDelete="CASCADE")
      */
     private $post;
 

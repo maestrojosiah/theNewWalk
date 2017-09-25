@@ -227,4 +227,5 @@ class PostController extends Controller
         return $this->render('post/edit.html.twig', $data);
 	}
 
+
 }

@@ -1,5 +1,13 @@
 @import url(http://fonts.googleapis.com/css?family=Roboto);
 
+.infinite-container.infinite-loading:after {
+  content: url('../img/loading.gif');
+  display: block!important;
+  padding: 40px 10px;
+  margin-top: 10px;
+  text-align: center; 
+}
+
 .featherlight .legend {
     position: absolute;
     bottom: 0;

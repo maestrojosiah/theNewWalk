@@ -81,3 +81,8 @@ ivory_ck_editor:
                 - { name: "styles", items: ['Bold', 'Italic', 'BulletedList', 'Link', 'Format'] }
                 - { name: "insert", items: ['Image'] }
 
+fd_private_message:
+    # ...
+    conversation:
+        form:
+            type: AppBundle\Form\ConversationType

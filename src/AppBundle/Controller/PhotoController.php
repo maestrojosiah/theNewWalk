@@ -255,15 +255,15 @@ class PhotoController extends Controller
             if($size > 4000000){
                 $percent = 0.05;
             } else if ($size > 3000000 && $size < 4000000){
-                $percent = 0.08;
-            } else if ($size > 2000000 && $size < 3000000){
-                $percent = 0.1;
-            } else if ($size > 1000000 && $size < 2000000){
                 $percent = 0.2;
-            } else if ($size > 500000 && $size < 1000000){
+            } else if ($size > 2000000 && $size < 3000000){
                 $percent = 0.3;
-            } else if ($size > 250000 && $size < 500000){
+            } else if ($size > 1000000 && $size < 2000000){
+                $percent = 0.4;
+            } else if ($size > 500000 && $size < 1000000){
                 $percent = 0.5;
+            } else if ($size > 250000 && $size < 500000){
+                $percent = 0.6;
             } else if ($size > 100000 && $size < 250000){
                 $percent = 0.8;
             } else {

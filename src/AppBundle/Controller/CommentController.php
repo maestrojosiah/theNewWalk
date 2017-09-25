@@ -224,4 +224,69 @@ class CommentController extends Controller
         return new JsonResponse($data);
 	}
 
+    /**
+     * @Route("/makeup/comment", name="makeup_comments")
+     */
+    public function commentMakeupAction(Request $request)
+    {
+        set_time_limit(0);
+        $commentArray = 
+array (
+  0 => 
+  array (
+    'author' => 'Kibiwottarus@gmail.com',
+    'update_id' => '1379',
+    'created' => '2015-05-19 12:16:01',
+    'body' => 'Amen!',
+  ),
+  1 => 
+  array (
+    'author' => 'Kibiwottarus@gmail.com',
+    'update_id' => '1375',
+    'created' => '2015-05-19 12:28:03',
+    'body' => 'It is the fulfilment of prophesy.',
+  ),
+  2 => 
+  array (
+    'author' => 'elizabethmoraa200@gmail.com',
+    'update_id' => '1379',
+    'created' => '2015-05-19 14:33:30',
+    'body' => 'Amen!it doesn\'t matter who you are God still loves us.Amazing grace indeed and love.',
+  ),
+  3 => 
+  array (
+    'author' => 'milcahkelly6@gmail.com',
+    'update_id' => '1379',
+    'created' => '2015-05-19 23:06:23',
+    'body' => 'Wow! Amen!',
+  ),
+);
+        // 1) build the form
+        foreach($commentArray as $commentSingle){
+            $comment = new Comment();
+
+            $user = $this->getDoctrine()->getManager()
+                ->getRepository('AppBundle:User')
+                ->findOneByEmail($commentSingle['author']);
+
+            $post = $this->getDoctrine()->getManager()
+                ->getRepository('AppBundle:Post')
+                ->find($commentSingle['update_id']);
+
+            $comment->setPost($post);
+            $comment->setUser($user);
+            $comment->setBody($commentSingle['body']);
+            $comment->setCreated(new \DateTime($commentSingle['created']));
+
+            // 4) save the Comment!
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+        }
+        
+        $data['commentArray'] = $user;
+        return $this->render('registration/makeup.html.twig', ['data'=>$data]  );
+    }
+
+
 }

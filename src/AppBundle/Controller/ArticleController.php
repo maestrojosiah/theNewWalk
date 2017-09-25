@@ -65,7 +65,7 @@ class ArticleController extends Controller
         $articles = $em->getRepository('AppBundle:Article')
             ->findBy(
                 array(),
-                array('id'=>'DESC'),
+                array('id'=>'ASC'),
                 $limit,
                 $offset
             );
